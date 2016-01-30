@@ -72,16 +72,10 @@ catshare_download() {
     if [ -n "$AUTH" ]; then
         catshare_login "$AUTH" "$COOKIE_FILE" "$BASE_URL" || return
         
-    fi
-    
-    
-
-    PAGE=$(curl -c "$COOKIE_FILE" -b "$COOKIE_FILE" "$URL") || return
-
-    if [ "$AUTH" ]; then
+        PAGE=$(curl -c "$COOKIE_FILE" -b "$COOKIE_FILE" "$URL") || return
         FILE_URL=$(parse_attr_quiet '<form.*method="GET">' 'action' <<< "$PAGE") || return
         echo "$FILE_URL"
-        exit
+        return
     fi
     
     if match "Nasz serwis wykrył że Twój adres IP nie pochodzi z Polski." "$PAGE"; then
